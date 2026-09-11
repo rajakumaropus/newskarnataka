@@ -19,3 +19,5 @@ AI-powered news aggregation platform for Karnataka news.
 
 Automated CI/CD via GitHub Actions and Vercel.
 
+
+> Last updated: 2026-09-11 21:36:58 - Ready for production deployment
