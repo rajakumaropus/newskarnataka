@@ -1,0 +1,77 @@
+version: '3.8'
+
+# Local Development Docker Compose
+# Uses local PostgreSQL instead of remote database
+# For development and testing only
+
+services:
+
+  # LOCAL PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: newskarnataka-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: newskarnataka
+      POSTGRES_USER: news
+      POSTGRES_PASSWORD: news321
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./00_SCHEMA_DEPLOYMENT_MASTER_SCRIPT.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    networks:
+      - newskarnataka-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U news"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # REDIS CACHE
+  redis:
+    image: redis:7-alpine
+    container_name: newskarnataka-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass redis123
+    networks:
+      - newskarnataka-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PGADMIN (Database UI)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: newskarnataka-pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@newskarnataka.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - newskarnataka-net
+
+networks:
+  newskarnataka-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local

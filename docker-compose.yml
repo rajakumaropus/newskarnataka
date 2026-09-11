@@ -1,0 +1,58 @@
+version: '3.8'
+
+# NewsKarnataka Docker Compose - Local Development
+# Connects to remote Strapi at 103.191.208.235:1337
+# Connects to remote PostgreSQL at 103.191.208.235:5432
+# Purpose: Local services only (Redis, pgAdmin)
+
+services:
+
+  # ============================================
+  # REDIS CACHE & SESSION STORE
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: newskarnataka-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+    networks:
+      - newskarnataka-net
+
+  # ============================================
+  # PGADMIN - Database Management UI
+  # ============================================
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: newskarnataka-pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@newskarnataka.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    
+    networks:
+      - newskarnataka-net
+
+networks:
+  newskarnataka-net:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local

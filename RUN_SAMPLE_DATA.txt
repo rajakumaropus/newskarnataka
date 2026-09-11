@@ -1,0 +1,29 @@
+🚀 CREATE SAMPLE DATA - INSTRUCTIONS
+
+Step 1: Open PowerShell and navigate to workspace
+  cd d:\Personal\Kiro\newsKarnataka
+
+Step 2: Run the sample data creation script with your API token:
+  .\scripts\create-sample-data-simple.ps1 `
+    -StrapiUrl "http://103.191.208.235:1337" `
+    -ApiToken "YOUR_API_TOKEN_HERE"
+
+Replace "YOUR_API_TOKEN_HERE" with the token you created in Strapi admin.
+
+Example:
+  .\scripts\create-sample-data-simple.ps1 `
+    -StrapiUrl "http://103.191.208.235:1337" `
+    -ApiToken "abc123def456ghi789jkl012mno345pqr678stu901vwx234yz"
+
+Step 3: Wait for the script to complete
+  You should see:
+  - ✅ Created category messages
+  - ✅ Created article messages
+  - Summary showing categories and articles created
+
+Step 4: Verify in Strapi Admin
+  - Go to: http://103.191.208.235:1337/admin
+  - Check Content Manager > Articles
+  - You should see 8 articles with categories
+
+Done! ✅
