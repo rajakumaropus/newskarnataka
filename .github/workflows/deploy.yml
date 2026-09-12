@@ -25,7 +25,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'newskarnataka-website/package-lock.json'
 
       - name: Install dependencies
         working-directory: ./newskarnataka-website
@@ -63,8 +62,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: 'newskarnataka-console/package-lock.json'
-
+          
       - name: Install dependencies
         working-directory: ./newskarnataka-console
         run: npm ci
