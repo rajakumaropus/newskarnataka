@@ -21,3 +21,5 @@ Automated CI/CD via GitHub Actions and Vercel.
 
 
 > Last updated: 2026-09-11 21:36:58 - Ready for production deployment
+
+> Workflow fix applied: 2026-09-12 09:01:54
