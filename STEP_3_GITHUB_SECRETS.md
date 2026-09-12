@@ -12,10 +12,10 @@ Before adding secrets, gather these values:
 
 ### From your `.env` file:
 ```
-VERCEL_TOKEN = vcp_65UfIWbi4c7x8c4ftcovc5Zsb2JaeuzYI4j438qM9CLUH5ziOv1l24pm
+VERCEL_TOKEN = vcp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 VERCEL_ORG_ID = rajkumaropus-7015
 STRAPI_URL = http://103.191.208.235:1337
-STRAPI_API_TOKEN = a18e5bcb9bc06d3af2e522ba790c6e9465c33fa058e2e0283576faa242a35a8129280963a7b0c908f09d3e97cd557c527e669f742c23fcd96702692280ffd4ba58fd2ff8b4d26ae26f263d6f228ef53f335fa6d33fdf513a7e6402ed02269a4d328fb1712b212420726d3e6d8996a6ebeba63c37bffcbddffabfbf91
+STRAPI_API_TOKEN = (your-strapi-api-token)
 ```
 
 ### From Vercel Dashboard:
@@ -52,7 +52,7 @@ You should see:
 
 ```
 Name:  VERCEL_TOKEN
-Value: vcp_65UfIWbi4c7x8c4ftcovc5Zsb2JaeuzYI4j438qM9CLUH5ziOv1l24pm
+Value: (from your .env file)
 ```
 
 **Steps:**
@@ -117,7 +117,7 @@ Value: http://103.191.208.235:1337
 
 ```
 Name:  STRAPI_API_TOKEN
-Value: a18e5bcb9bc06d3af2e522ba790c6e9465c33fa058e2e0283576faa242a35a8129280963a7b0c908f09d3e97cd557c527e669f742c23fcd96702692280ffd4ba58fd2ff8b4d26ae26f263d6f228ef53f335fa6d33fdf513a7e6402ed02269a4d328fb1712b212420726d3e6d8996a6ebeba63c37bffcbddffabfbf91
+Value: (from your .env file)
 ```
 
 **Steps:**
