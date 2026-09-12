@@ -1,0 +1,54 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      
+      # Build Website
+      - name: Build Website
+        working-directory: newskarnataka-website
+        run: |
+          npm install --legacy-peer-deps
+          npm run build
+        env:
+          NEXT_PUBLIC_STRAPI_URL: http://103.191.208.235:1337
+          STRAPI_API_TOKEN_FULL_ACCESS: ${{ secrets.STRAPI_API_TOKEN }}
+      
+      # Build Console
+      - name: Build Console
+        working-directory: newskarnataka-console
+        run: |
+          npm install --legacy-peer-deps
+          npm run build
+        env:
+          VITE_STRAPI_URL: http://103.191.208.235:1337
+          VITE_STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
+      
+      # Deploy Website
+      - name: Deploy Website
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEBSITE }}
+          working-directory: newskarnataka-website
+      
+      # Deploy Console
+      - name: Deploy Console
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_CONSOLE }}
+          working-directory: newskarnataka-console
