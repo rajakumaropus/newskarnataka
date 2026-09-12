@@ -29,7 +29,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./newskarnataka-website
-        run: npm ci
+        run: npm install
 
       - name: Run ESLint
         working-directory: ./newskarnataka-website
@@ -43,7 +43,7 @@ jobs:
           STRAPI_API_TOKEN_FULL_ACCESS: ${{ secrets.STRAPI_API_TOKEN }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: website-build
           path: newskarnataka-website/.next
@@ -81,7 +81,7 @@ jobs:
           VITE_STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: console-build
           path: newskarnataka-console/dist
