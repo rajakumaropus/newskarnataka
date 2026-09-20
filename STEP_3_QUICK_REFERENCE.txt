@@ -1,0 +1,49 @@
+════════════════════════════════════════════════════════════════════════
+STEP 3: VERIFY GITHUB SECRETS - QUICK REFERENCE
+════════════════════════════════════════════════════════════════════════
+
+URL: https://github.com/rajakumaropus/newskarnataka/settings/secrets/actions
+
+ACTION: Verify all 5 secrets exist (values are hidden for security)
+
+REQUIRED SECRETS (Check each one):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[ ] VERCEL_TOKEN
+    Value: vcp_65UfIWbi4c7x8c4ftcovc5Zsb2JaeuzYI4j438qM9CLUH5ziOv1l24pm
+    Purpose: Authenticate with Vercel API
+
+[ ] VERCEL_WEBSITE_PROJECT_ID
+    Value: prj_bkVUspAEPRO7h9Zc9cq48k2FkND1
+    Purpose: Deploy Website (Next.js) project
+
+[ ] VERCEL_CONSOLE_PROJECT_ID
+    Value: prj_Nx3x0MVQdkxp5qeE7eo6cyLiK9jw
+    Purpose: Deploy Console (Vite React) project
+
+[ ] STRAPI_URL
+    Value: http://103.191.208.235:1337
+    Purpose: Backend API endpoint
+
+[ ] STRAPI_API_TOKEN
+    Value: (Check in .env file)
+    Purpose: Authenticate with Strapi API
+
+════════════════════════════════════════════════════════════════════════
+IF A SECRET IS MISSING
+════════════════════════════════════════════════════════════════════════
+
+1. Click "New repository secret" button
+2. Enter Name (e.g., VERCEL_TOKEN)
+3. Enter Value (from list above)
+4. Click "Add secret"
+
+════════════════════════════════════════════════════════════════════════
+WHEN COMPLETE
+════════════════════════════════════════════════════════════════════════
+
+Reply with: ✅ Step 3 Done
+
+Then proceed to Step 4: Trigger test deployment
+
+════════════════════════════════════════════════════════════════════════
