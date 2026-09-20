@@ -1,0 +1,9 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm ci",
+  "env": {
+    "VITE_STRAPI_URL": "@vite_strapi_url",
+    "VITE_STRAPI_API_TOKEN": "@vite_strapi_api_token"
+  }
+}
