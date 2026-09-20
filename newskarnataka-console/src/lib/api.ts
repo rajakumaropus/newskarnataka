@@ -3,11 +3,17 @@ import axios from 'axios';
 const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://103.191.208.235:1337';
 const API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN;
 
+console.log('[Strapi Config]', {
+  url: STRAPI_URL,
+  tokenSet: !!API_TOKEN,
+  tokenLength: API_TOKEN?.length || 0,
+});
+
 export const strapiClient = axios.create({
   baseURL: `${STRAPI_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${API_TOKEN}`,
+    ...(API_TOKEN && { Authorization: `Bearer ${API_TOKEN}` }),
   },
 });
 
@@ -62,17 +68,22 @@ export const deleteArticle = async (articleId: number) => {
 
 // Get dashboard stats
 export const getDashboardStats = async () => {
-  const [articles, draft, published, categories] = await Promise.all([
-    strapiClient.get('/articles'),
-    strapiClient.get('/articles?filters[status][$eq]=draft'),
-    strapiClient.get('/articles?filters[status][$eq]=published'),
-    strapiClient.get('/categories'),
-  ]);
+  try {
+    const [articles, draft, published, categories] = await Promise.all([
+      strapiClient.get('/articles'),
+      strapiClient.get('/articles?filters[status][$eq]=draft'),
+      strapiClient.get('/articles?filters[status][$eq]=published'),
+      strapiClient.get('/categories'),
+    ]);
 
-  return {
-    totalArticles: articles.data.meta.pagination.total,
-    draftArticles: draft.data.meta.pagination.total,
-    publishedArticles: published.data.meta.pagination.total,
-    totalCategories: categories.data.meta.pagination.total,
-  };
+    return {
+      totalArticles: articles.data?.meta?.pagination?.total || 0,
+      draftArticles: draft.data?.meta?.pagination?.total || 0,
+      publishedArticles: published.data?.meta?.pagination?.total || 0,
+      totalCategories: categories.data?.meta?.pagination?.total || 0,
+    };
+  } catch (error) {
+    console.error('[Dashboard Stats Error]', error);
+    throw error;
+  }
 };
