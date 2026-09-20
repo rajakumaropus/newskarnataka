@@ -1,0 +1,4 @@
+Console Redeployment Trigger
+Generated: September 10, 2026
+Status: Vercel environment variables configured with fresh Strapi API token
+Action: This commit triggers fresh deployment with new env vars
