@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  VERCEL_ORG_ID: team_Hc1spTfjdTMy2FHP8nTmuMJV
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,45 +19,34 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
       
-      - name: Install and build website
+      - name: Build website
         working-directory: newskarnataka-website
-        run: |
-          npm ci --legacy-peer-deps
-          npm run build
+        run: npm ci --legacy-peer-deps && npm run build
         env:
           NEXT_PUBLIC_STRAPI_URL: http://103.191.208.235:1337
           STRAPI_API_TOKEN_FULL_ACCESS: ${{ secrets.STRAPI_API_TOKEN }}
       
-      - name: Install and build console
+      - name: Build console
         working-directory: newskarnataka-console
-        run: |
-          npm ci --legacy-peer-deps
-          npm run build
+        run: npm ci --legacy-peer-deps && npm run build
         env:
           VITE_STRAPI_URL: http://103.191.208.235:1337
           VITE_STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
       
-      - name: Remove stale Vercel metadata
-        run: |
-          rm -rf newskarnataka-website/.vercel
-          rm -rf newskarnataka-console/.vercel
-      
-      - name: Deploy website to Vercel
+      - name: Deploy website
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-org-id: ${{ env.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
           working-directory: newskarnataka-website
-          prod: true
       
-      - name: Deploy console to Vercel
+      - name: Deploy console
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-org-id: ${{ env.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_CONSOLE_PROJECT_ID }}
           working-directory: newskarnataka-console
-          prod: true
