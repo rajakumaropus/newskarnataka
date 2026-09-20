@@ -1,0 +1,163 @@
+================================================================================
+NEWSKARNATAKA API PROXY - QUICK START
+================================================================================
+
+The Console needs a proxy server to communicate with the private Strapi backend.
+This is a 5-minute setup.
+
+================================================================================
+STEP 1: SSH into your private server
+================================================================================
+
+ssh user@103.191.208.235
+
+================================================================================
+STEP 2: Download the proxy files
+================================================================================
+
+# Option A: Clone from GitHub (if you have git)
+cd /opt
+git clone https://github.com/rajakumaropus/newskarnataka.git
+cd newskarnataka
+
+# Option B: Copy files manually from your workspace
+# (ask for SCP commands if needed)
+
+================================================================================
+STEP 3: Setup the proxy
+================================================================================
+
+# Create directory (if not exists)
+mkdir -p /opt/newskarnataka
+cd /opt/newskarnataka
+
+# Copy the proxy files:
+# - api-proxy.js
+# - api-proxy-package.json (rename to package.json)
+# - api-proxy.env.example (rename to .env)
+
+# Install dependencies
+npm install express axios cors dotenv
+
+# Create .env file (if not already)
+cat > .env << EOF
+PORT=3000
+STRAPI_URL=http://103.191.208.235:1337
+STRAPI_API_TOKEN=c47da022dfd6b7d5ecf75684672004d91db115923a8bb480e9f8f376dcd61192e88f88a086957d0402810135d8e00156339b474563987ad8087c0143338b4853508655f066dbcecdf98e8f609b73c1dd181fdd0ecb46ffdb92f152cbe4de4cd87e0883a67eceda20a33cc9f186df9134e502ce839d5cc57e3f060de7866573d2
+EOF
+
+================================================================================
+STEP 4: Start the proxy
+================================================================================
+
+# Test mode (see logs in terminal)
+node api-proxy.js
+
+# Press Ctrl+C after verifying it starts
+
+# Production mode (runs in background)
+npm install -g pm2
+pm2 start api-proxy.js --name "api-proxy"
+pm2 save
+pm2 startup
+
+# View logs:
+pm2 logs api-proxy
+
+================================================================================
+STEP 5: Allow firewall access
+================================================================================
+
+sudo ufw allow 3000/tcp
+
+================================================================================
+STEP 6: Test the proxy
+================================================================================
+
+# From your server, test it works:
+curl http://localhost:3000/health
+
+# Should return:
+# {"status":"ok","timestamp":"2026-09-10T..."}
+
+================================================================================
+STEP 7: Configure access for Vercel
+================================================================================
+
+Option A: Using ngrok (temporary tunnel for testing):
+  - Download: https://ngrok.com/download
+  - Run: ngrok http 3000
+  - You'll get a URL like: https://abc123.ngrok.io
+  - Use that URL in Vercel env var
+
+Option B: Using DNS + Reverse Proxy (production):
+  - Set up Nginx/Caddy on a public server
+  - Point api.newskarnataka.local to your proxy
+  - Use https://api.newskarnataka.local:3000 in Vercel
+
+Option C: VPN Access:
+  - Set up Wireguard/OpenVPN on your server
+  - Connect Console via VPN
+  - Access proxy on private IP
+
+================================================================================
+STEP 8: Update Vercel environment variable
+================================================================================
+
+1. Go to: https://vercel.com/rajkumaropus-7015/newskarnataka-console/settings/environment-variables
+2. Update VITE_API_PROXY_URL with your proxy URL
+3. Save (triggers redeployment)
+4. Wait 2-3 minutes for build
+
+================================================================================
+STEP 9: Verify everything works
+================================================================================
+
+1. Open Console: https://newskarnataka-console.vercel.app
+2. Open DevTools (F12) → Console tab
+3. Should see: "[API Proxy Config] { url: '...', tokenSet: true, ... }"
+4. Dashboard should show article count > 0
+
+If not working, check:
+- Proxy is running: pm2 logs api-proxy
+- Firewall allows port 3000: sudo ufw status
+- Strapi is accessible: curl http://103.191.208.235:1337/api/articles
+
+================================================================================
+COMMANDS REFERENCE
+================================================================================
+
+# Check if proxy is running
+pm2 list
+
+# View proxy logs
+pm2 logs api-proxy
+
+# Restart proxy
+pm2 restart api-proxy
+
+# Stop proxy
+pm2 stop api-proxy
+
+# Remove proxy from PM2
+pm2 delete api-proxy
+
+# Health check from your computer
+curl http://your-server-ip:3000/health
+
+# Health check from anywhere (if exposed)
+curl https://api.newskarnataka.local:3000/health
+
+================================================================================
+WHAT'S NEXT
+================================================================================
+
+✅ Proxy is running
+✅ Console sees article data
+→ Next: Create more articles via Console
+→ Then: WordPress scraper for bulk import
+→ Finally: Go live!
+
+Need help? Check: API_PROXY_DEPLOYMENT_GUIDE.md
+
+================================================================================
