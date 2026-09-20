@@ -41,17 +41,11 @@ jobs:
           VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
         run: |
-          cd "$GITHUB_WORKSPACE/newskarnataka-website"
-          npx --yes vercel@latest link \
-            --cwd . \
-            --project "$VERCEL_PROJECT_ID" \
-            --scope "$VERCEL_ORG_ID" \
-            --token "$VERCEL_TOKEN" \
-            --yes
           npx --yes vercel@latest deploy \
-            --cwd . \
+            --cwd "$GITHUB_WORKSPACE/newskarnataka-website" \
             --prod \
             --scope "$VERCEL_ORG_ID" \
+            --project "$VERCEL_PROJECT_ID" \
             --token "$VERCEL_TOKEN" \
             --yes
       
@@ -61,16 +55,10 @@ jobs:
           VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CONSOLE_PROJECT_ID }}
         run: |
-          cd "$GITHUB_WORKSPACE/newskarnataka-console"
-          npx --yes vercel@latest link \
-            --cwd . \
-            --project "$VERCEL_PROJECT_ID" \
-            --scope "$VERCEL_ORG_ID" \
-            --token "$VERCEL_TOKEN" \
-            --yes
           npx --yes vercel@latest deploy \
-            --cwd . \
+            --cwd "$GITHUB_WORKSPACE/newskarnataka-console" \
             --prod \
             --scope "$VERCEL_ORG_ID" \
+            --project "$VERCEL_PROJECT_ID" \
             --token "$VERCEL_TOKEN" \
             --yes
