@@ -1,0 +1,59 @@
+════════════════════════════════════════════════════════════════════════
+STEP 2: UPDATE VERCEL CONSOLE PROJECT SETTINGS - QUICK REFERENCE
+════════════════════════════════════════════════════════════════════════
+
+URL: https://vercel.com/rajkumaropus-7015/newskarnataka-console/settings
+
+SETTINGS TO UPDATE (Go to Settings → General):
+
+1. Root Directory
+   Current: (varies)
+   New:     newskarnataka-console
+   Save:    Click "Save"
+
+2. Build Command
+   Current: (varies)
+   New:     npm run build
+   Save:    Click "Save"
+
+3. Output Directory
+   Current: (varies)
+   New:     dist                          ← Different from Website (.next)!
+   Save:    Click "Save"
+
+4. Install Command
+   Current: (varies)
+   New:     npm ci --legacy-peer-deps
+   Save:    Click "Save"
+
+5. Node.js Version
+   Current: (varies)
+   New:     20.x
+   Save:    Click "Save"
+
+6. Git Integration
+   Go to:   Settings → Git
+   Action:  Click "Disconnect" if connected
+   Verify:  Status shows "Disconnected"
+
+════════════════════════════════════════════════════════════════════════
+KEY DIFFERENCES FROM STEP 1
+════════════════════════════════════════════════════════════════════════
+
+Website (Step 1):              Console (Step 2):
+─────────────────────────────  ──────────────────────────────
+newskarnataka-website          newskarnataka-console
+.next                          dist                    ⚠️ Different!
+────────────────────────────────────────────────────────────────
+
+All other settings are identical.
+
+════════════════════════════════════════════════════════════════════════
+WHEN COMPLETE
+════════════════════════════════════════════════════════════════════════
+
+Reply with: ✅ Step 2 Complete
+
+Then proceed to Step 3: Verify GitHub Secrets
+
+════════════════════════════════════════════════════════════════════════
