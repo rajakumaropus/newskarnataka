@@ -25,14 +25,14 @@ jobs:
         working-directory: newskarnataka-website
         run: npm ci --legacy-peer-deps && npm run build
         env:
-          NEXT_PUBLIC_STRAPI_URL: http://103.191.208.235:1337
+          NEXT_PUBLIC_STRAPI_URL: ${{ secrets.STRAPI_URL }}
           STRAPI_API_TOKEN_FULL_ACCESS: ${{ secrets.STRAPI_API_TOKEN }}
       
       - name: Build console
         working-directory: newskarnataka-console
         run: npm ci --legacy-peer-deps && npm run build
         env:
-          VITE_STRAPI_URL: http://103.191.208.235:1337
+          VITE_STRAPI_URL: ${{ secrets.STRAPI_URL }}
           VITE_STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
       
       - name: Deploy website
