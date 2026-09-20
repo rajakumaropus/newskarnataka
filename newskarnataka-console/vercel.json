@@ -3,10 +3,6 @@
   "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "env": {
-    "VITE_STRAPI_URL": "@strapi_url",
-    "VITE_STRAPI_API_TOKEN": "@strapi_api_token"
-  },
   "rewrites": [
     {
       "source": "/(.*)",
