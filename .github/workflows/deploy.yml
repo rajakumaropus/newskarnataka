@@ -41,8 +41,8 @@ jobs:
           VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
         run: |
+          cd "$GITHUB_WORKSPACE"
           npx --yes vercel@latest deploy \
-            --cwd "$GITHUB_WORKSPACE/newskarnataka-website" \
             --prod \
             --scope "$VERCEL_ORG_ID" \
             --project "$VERCEL_PROJECT_ID" \
@@ -55,8 +55,8 @@ jobs:
           VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CONSOLE_PROJECT_ID }}
         run: |
+          cd "$GITHUB_WORKSPACE"
           npx --yes vercel@latest deploy \
-            --cwd "$GITHUB_WORKSPACE/newskarnataka-console" \
             --prod \
             --scope "$VERCEL_ORG_ID" \
             --project "$VERCEL_PROJECT_ID" \
