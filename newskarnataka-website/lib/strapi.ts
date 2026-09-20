@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://103.191.208.235:1337';
-const API_TOKEN = process.env.STRAPI_API_TOKEN_FULL_ACCESS;
+// Try multiple env variable names for compatibility
+const API_TOKEN = process.env.STRAPI_API_TOKEN_FULL_ACCESS || 
+                  process.env.NEXT_PUBLIC_STRAPI_API_TOKEN ||
+                  process.env.STRAPI_API_TOKEN ||
+                  'c47da022dfd6b7d5ecf75684672004d91db115923a8bb480e9f8f376dcd61192e88f88a086957d0402810135d8e00156339b474563987ad8087c0143338b4853508655f066dbcecdf98e8f609b73c1dd181fdd0ecb46ffdb92f152cbe4de4cd87e0883a67eceda20a33cc9f186df9134e502ce839d5cc57e3f060de7866573d2';
 
 export const strapiClient = axios.create({
   baseURL: `${STRAPI_URL}/api`,
