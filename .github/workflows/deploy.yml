@@ -36,36 +36,40 @@ jobs:
           VITE_STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
       
       - name: Deploy website
-        working-directory: newskarnataka-website
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
         run: |
+          cd "$GITHUB_WORKSPACE/newskarnataka-website"
           npx --yes vercel@latest link \
+            --cwd . \
             --project "$VERCEL_PROJECT_ID" \
             --scope "$VERCEL_ORG_ID" \
             --token "$VERCEL_TOKEN" \
             --yes
           npx --yes vercel@latest deploy \
+            --cwd . \
             --prod \
             --scope "$VERCEL_ORG_ID" \
             --token "$VERCEL_TOKEN" \
             --yes
       
       - name: Deploy console
-        working-directory: newskarnataka-console
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CONSOLE_PROJECT_ID }}
         run: |
+          cd "$GITHUB_WORKSPACE/newskarnataka-console"
           npx --yes vercel@latest link \
+            --cwd . \
             --project "$VERCEL_PROJECT_ID" \
             --scope "$VERCEL_ORG_ID" \
             --token "$VERCEL_TOKEN" \
             --yes
           npx --yes vercel@latest deploy \
+            --cwd . \
             --prod \
             --scope "$VERCEL_ORG_ID" \
             --token "$VERCEL_TOKEN" \
