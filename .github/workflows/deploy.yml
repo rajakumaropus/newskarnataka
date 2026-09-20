@@ -17,11 +17,9 @@ jobs:
         working-directory: newskarnataka-website
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
@@ -35,6 +33,12 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+        env:
+          NEXT_PUBLIC_STRAPI_URL: ${{ secrets.STRAPI_URL }}
+          STRAPI_API_TOKEN_FULL_ACCESS: ${{ secrets.STRAPI_API_TOKEN }}
 
       - name: Build Project
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
@@ -58,11 +62,9 @@ jobs:
         working-directory: newskarnataka-console
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
@@ -76,6 +78,12 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ env.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CONSOLE_PROJECT_ID }}
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+        env:
+          VITE_STRAPI_URL: ${{ secrets.STRAPI_URL }}
+          VITE_STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
 
       - name: Build Project
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
