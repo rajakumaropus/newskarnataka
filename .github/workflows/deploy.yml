@@ -13,6 +13,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
     defaults:
       run:
+        shell: bash
         working-directory: newskarnataka-website
     
     steps:
@@ -24,20 +25,23 @@ jobs:
           cache: npm
           cache-dependency-path: newskarnataka-website/package-lock.json
       
+      - name: Install dependencies
+        run: npm ci
+      
       - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+        run: npm install --save-dev vercel@latest
       
       - name: Pull Vercel Environment
-        run: vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
+        run: npx vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
       
       - name: Build Project
-        run: vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
+        run: npx vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
         env:
           NEXT_PUBLIC_STRAPI_URL: ${{ secrets.STRAPI_URL }}
           STRAPI_API_TOKEN_FULL_ACCESS: ${{ secrets.STRAPI_API_TOKEN }}
       
       - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}"
+        run: npx vercel deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}"
 
   deploy-console:
     runs-on: ubuntu-latest
@@ -46,6 +50,7 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CONSOLE_PROJECT_ID }}
     defaults:
       run:
+        shell: bash
         working-directory: newskarnataka-console
     
     steps:
@@ -57,17 +62,20 @@ jobs:
           cache: npm
           cache-dependency-path: newskarnataka-console/package-lock.json
       
+      - name: Install dependencies
+        run: npm ci
+      
       - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+        run: npm install --save-dev vercel@latest
       
       - name: Pull Vercel Environment
-        run: vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
+        run: npx vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
       
       - name: Build Project
-        run: vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
+        run: npx vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
         env:
           VITE_STRAPI_URL: ${{ secrets.STRAPI_URL }}
           VITE_STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
       
       - name: Deploy to Vercel
-        run: vercel deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}"
+        run: npx vercel deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}"
