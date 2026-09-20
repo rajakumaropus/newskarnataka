@@ -1,16 +1,17 @@
 import axios from 'axios';
 
-const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || 'http://103.191.208.235:1337';
+// API Proxy URL (public endpoint that bridges to private Strapi)
+const API_PROXY_URL = import.meta.env.VITE_API_PROXY_URL || 'http://api.newskarnataka.local:3000';
 const API_TOKEN = import.meta.env.VITE_STRAPI_API_TOKEN;
 
-console.log('[Strapi Config]', {
-  url: STRAPI_URL,
+console.log('[API Proxy Config]', {
+  url: API_PROXY_URL,
   tokenSet: !!API_TOKEN,
   tokenLength: API_TOKEN?.length || 0,
 });
 
 export const strapiClient = axios.create({
-  baseURL: `${STRAPI_URL}/api`,
+  baseURL: API_PROXY_URL,
   headers: {
     'Content-Type': 'application/json',
     ...(API_TOKEN && { Authorization: `Bearer ${API_TOKEN}` }),

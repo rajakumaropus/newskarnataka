@@ -1,0 +1,31 @@
+{
+  "name": "newskarnataka-api-proxy",
+  "version": "1.0.0",
+  "description": "API Proxy server for NewsKarnataka - bridges public Console to private Strapi",
+  "type": "module",
+  "main": "api-proxy.js",
+  "scripts": {
+    "start": "node api-proxy.js",
+    "dev": "nodemon api-proxy.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "newskarnataka",
+    "api-proxy",
+    "strapi",
+    "cms"
+  ],
+  "author": "NewsKarnataka Team",
+  "license": "MIT"
+}
