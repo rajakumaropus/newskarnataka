@@ -1,0 +1,80 @@
+════════════════════════════════════════════════════════════════════════
+STEP 4: TRIGGER TEST DEPLOYMENT - QUICK GUIDE
+════════════════════════════════════════════════════════════════════════
+
+URL: https://github.com/rajakumaropus/newskarnataka/actions
+
+GOAL: Manually trigger the "Deploy to Vercel" workflow
+
+════════════════════════════════════════════════════════════════════════
+TRIGGER OPTION A: Manual Trigger (RECOMMENDED)
+════════════════════════════════════════════════════════════════════════
+
+1. Go to: https://github.com/rajakumaropus/newskarnataka/actions
+
+2. Left sidebar: Click "Deploy to Vercel" workflow
+
+3. Top right: Click "Run workflow" button (dropdown)
+
+4. In dropdown: Click "Run workflow"
+
+5. Confirm: Workflow should appear in the list as "In progress"
+
+Expected: Both jobs start running in parallel
+- deploy-website
+- deploy-console
+
+════════════════════════════════════════════════════════════════════════
+TRIGGER OPTION B: Push Commit (Alternative)
+════════════════════════════════════════════════════════════════════════
+
+1. Edit any file (e.g., README.md)
+
+2. Commit and push:
+   git add README.md
+   git commit -m "test: trigger deployment"
+   git push origin main
+
+3. Go to https://github.com/rajakumaropus/newskarnataka/actions
+
+4. New workflow run should appear automatically
+
+════════════════════════════════════════════════════════════════════════
+WHAT YOU SHOULD SEE
+════════════════════════════════════════════════════════════════════════
+
+After triggering:
+
+✓ "Deploy to Vercel" listed with status "In progress"
+✓ Yellow spinning icon (not red X or green checkmark yet)
+✓ Both jobs visible: deploy-website, deploy-console
+✓ Status message: "Workflow running..."
+
+Do NOT see:
+✗ "Failed" status
+✗ "Cancelled" status
+✗ Error messages
+✗ Stuck on "Queued" for >1 minute
+
+════════════════════════════════════════════════════════════════════════
+EXPECTED TIME
+════════════════════════════════════════════════════════════════════════
+
+Trigger to completion: 8-14 minutes
+
+Breakdown:
+- 0-1 min:   Trigger workflow
+- 1-5 min:   Setup nodes
+- 5-8 min:   Install dependencies
+- 8-10 min:  Build apps
+- 10-14 min: Deploy to Vercel
+
+════════════════════════════════════════════════════════════════════════
+WHEN COMPLETE
+════════════════════════════════════════════════════════════════════════
+
+Reply with: ✅ Step 4 Done - Workflow Triggered
+
+Then proceed to Step 5: Monitor workflow execution
+
+════════════════════════════════════════════════════════════════════════
