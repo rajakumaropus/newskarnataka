@@ -12,6 +12,8 @@ jobs:
   deploy-website:
     name: Deploy Website (Next.js)
     runs-on: ubuntu-latest
+    env:
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
     defaults:
       run:
         working-directory: newskarnataka-website
@@ -45,6 +47,8 @@ jobs:
   deploy-console:
     name: Deploy Console (Vite)
     runs-on: ubuntu-latest
+    env:
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CONSOLE_PROJECT_ID }}
     defaults:
       run:
         working-directory: newskarnataka-console
