@@ -8,48 +8,53 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # Step 2: Setup Node.js 20 (compatible with Next.js)
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      # Step 3: Install and build website
-      - name: Install & Build Website
+          node-version: 24
+      
+      - name: Install and build website
         working-directory: newskarnataka-website
-        run: npm install --legacy-peer-deps && npm run build
+        run: |
+          npm ci --legacy-peer-deps
+          npm run build
         env:
           NEXT_PUBLIC_STRAPI_URL: http://103.191.208.235:1337
           STRAPI_API_TOKEN_FULL_ACCESS: ${{ secrets.STRAPI_API_TOKEN }}
-
-      # Step 4: Install and build console
-      - name: Install & Build Console
+      
+      - name: Install and build console
         working-directory: newskarnataka-console
-        run: npm install --legacy-peer-deps && npm run build
+        run: |
+          npm ci --legacy-peer-deps
+          npm run build
         env:
           VITE_STRAPI_URL: http://103.191.208.235:1337
           VITE_STRAPI_API_TOKEN: ${{ secrets.STRAPI_API_TOKEN }}
-
-      # Step 5: Deploy website to Vercel
-      - name: Deploy Website to Vercel
+      
+      - name: Remove stale Vercel metadata
+        run: |
+          rm -rf newskarnataka-website/.vercel
+          rm -rf newskarnataka-console/.vercel
+      
+      - name: Deploy website to Vercel
         uses: amondnet/vercel-action@v25
         with:
-          vercel-token: vcp_65UfIWbi4c7x8c4ftcovc5Zsb2JaeuzYI4j438qM9CLUH5ziOv1l24pm
-          vercel-org-id: rajkumaropus-7015
-          vercel-project-id: prj_bkVUspAEPRO7h9Zc9cq48k2FkND1
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
           working-directory: newskarnataka-website
-
-      # Step 6: Deploy console to Vercel
-      - name: Deploy Console to Vercel
+          prod: true
+      
+      - name: Deploy console to Vercel
         uses: amondnet/vercel-action@v25
         with:
-          vercel-token: vcp_65UfIWbi4c7x8c4ftcovc5Zsb2JaeuzYI4j438qM9CLUH5ziOv1l24pm
-          vercel-org-id: rajkumaropus-7015
-          vercel-project-id: prj_bkVUspAEPRO7h9Zc9cq48k2FkND1
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_CONSOLE_PROJECT_ID }}
           working-directory: newskarnataka-console
+          prod: true
