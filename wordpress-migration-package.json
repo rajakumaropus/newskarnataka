@@ -1,0 +1,20 @@
+{
+  "name": "newskarnataka-wordpress-migration",
+  "version": "1.0.0",
+  "description": "WordPress to Strapi content migration for NewsKarnataka",
+  "type": "commonjs",
+  "main": "wordpress-scraper.js",
+  "scripts": {
+    "migrate": "node wordpress-scraper.js",
+    "migrate:dev": "DEBUG=* node wordpress-scraper.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "NewsKarnataka Team",
+  "license": "MIT"
+}
