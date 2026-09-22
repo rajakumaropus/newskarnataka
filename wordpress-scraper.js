@@ -179,18 +179,30 @@ async function fetchTagNames(tagIds) {
  * Transform WordPress post to Strapi article format
  */
 async function transformPost(post, tagNamesMap = {}) {
-  // Generate slug
-  const slug = post.slug || post.title.rendered
+  // Generate slug - remove URL encoding and special characters
+  let slug = post.slug || post.title.rendered
     .toLowerCase()
     .replace(/\s+/g, '-')
-    .replace(/[^\w\-]/g, '');
+    .replace(/[^\w\-]/g, '')
+    .replace(/-+/g, '-') // Remove multiple dashes
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing dashes
+  
+  // Also decode any URL-encoded characters
+  try {
+    slug = decodeURIComponent(slug);
+  } catch (e) {
+    // If decoding fails, just use the original slug
+  }
+  
+  // Final sanitization - ensure only allowed characters
+  slug = slug.replace(/[^a-z0-9\-_.~]/g, '').substring(0, 200);
 
-  // Extract excerpt - clean HTML
+  // Extract excerpt - clean HTML and limit to 80 chars for description field
   let excerpt = '';
   if (post.excerpt?.rendered) {
-    excerpt = cleanHtml(post.excerpt.rendered).substring(0, 200);
+    excerpt = cleanHtml(post.excerpt.rendered).substring(0, 80);
   } else if (post.content?.rendered) {
-    excerpt = cleanHtml(post.content.rendered).substring(0, 200);
+    excerpt = cleanHtml(post.content.rendered).substring(0, 80);
   }
 
   // Get featured image
@@ -213,12 +225,12 @@ async function transformPost(post, tagNamesMap = {}) {
   const readTime = Math.max(1, Math.ceil(wordCount / 200));
 
   // Get tag names (either from cache or from WordPress)
-  let keywordsStr = '';
+  let tagsStr = '';
   if (post.tags && post.tags.length > 0) {
     if (Object.keys(tagNamesMap).length > 0) {
-      keywordsStr = post.tags.map(id => tagNamesMap[id] || `tag-${id}`).join(', ');
+      tagsStr = post.tags.map(id => tagNamesMap[id] || `tag-${id}`).join(', ');
     } else {
-      keywordsStr = (post.tags || []).map(t => `tag-${t}`).join(', ');
+      tagsStr = (post.tags || []).map(t => `tag-${t}`).join(', ');
     }
   }
 
@@ -231,31 +243,24 @@ async function transformPost(post, tagNamesMap = {}) {
              tagName.toLowerCase().includes('alert');
     });
 
+  // Get WordPress post format (standard, video, quote, link, status, image, gallery, audio)
+  const contentFormat = post.format || 'standard';
+
+  // Get WordPress post views from meta (if available)
+  const views = (post.meta?.views || post.yoast_head_json?.og_image?.length) ? parseInt(post.meta?.views || 0, 10) : 0;
+
+  // Get WordPress post URL
+  const wordpressUrl = post.link || '';
+
+  // Check if post is sticky
+  const isSticky = post.sticky || false;
+
   return {
     title: post.title.rendered,
     slug,
     description: excerpt,
-    // content is NOT in the current Strapi schema - only description exists
-    // featuredImage: featuredImage, // Not yet supported
-    category: categoryId,
-    author: post.author,
-    tags: post.tags || [],
-    publishedDate: post.date,
-    updatedDate: post.modified,
-    isFeatured: post.sticky || false,
-    isSticky: post.sticky || false,
-    isBreakingNews: isBreakingNews,
-    readTime,
-    metaDescription: excerpt,
-    keywords: keywordsStr,
-    viewsCount: post.meta?.views || 0,
-    views: post.meta?.views || 0,
-    status: post.status === 'publish' ? 'published' : 'draft',
-    
-    // NEW FIELDS - WordPress data preservation
     wordpressPostId: post.id,
-    wordpressUrl: post.link,
-    contentFormat: post.format || 'standard',
+    tags: tagsStr,
   };
 }
 
@@ -408,7 +413,7 @@ async function migrate() {
 
   try {
     // Step 1: Verify connections
-    console.log('\n[1/5] Verifying connections...');
+    console.log('\n[1/4] Verifying connections...');
     
     try {
       await wpClient.get('/wp-json/');
@@ -427,37 +432,18 @@ async function migrate() {
     }
 
     // Step 2: Fetch WordPress data
-    console.log('\n[2/5] Fetching WordPress data...');
-    const [wpPosts, wpCategories, wpTags] = await Promise.all([
-      fetchAllWordPressPosts(5), // Test with first 500 articles (5 pages)
-      fetchWordPressCategories(),
+    console.log('\n[2/4] Fetching WordPress data...');
+    const [wpPosts, wpTags] = await Promise.all([
+      fetchAllWordPressPosts(5), // Fetch all 500 articles (5 pages)
       fetchWordPressTags(),
     ]);
 
     console.log(`\n📊 Summary:`);
     console.log(`   Posts: ${wpPosts.length}`);
-    console.log(`   Categories: ${wpCategories.length}`);
     console.log(`   Tags: ${wpTags.length}`);
 
-    // Step 3: Sync categories and tags
-    console.log('\n[3/5] Syncing taxonomies...');
-    
-    const categoryMap = {};
-    for (const wpCat of wpCategories) {
-      const id = await syncCategory(wpCat);
-      if (id) categoryMap[wpCat.id] = id;
-    }
-    console.log(`✅ Synced ${Object.keys(categoryMap).length} categories`);
-
-    const tagMap = {};
-    for (const wpTag of wpTags) {
-      const id = await syncTag(wpTag);
-      if (id) tagMap[wpTag.id] = id;
-    }
-    console.log(`✅ Synced ${Object.keys(tagMap).length} tags`);
-
-    // Step 4: Transform posts
-    console.log('\n[4/5] Transforming posts...');
+    // Step 3: Transform posts
+    console.log('\n[3/4] Transforming posts...');
     
     // Build tag names map for efficient lookup
     const tagNamesMap = {};
@@ -472,8 +458,8 @@ async function migrate() {
     }
     console.log(`✅ Transformed ${articles.length} articles`);
 
-    // Step 5: Import articles
-    console.log('\n[5/5] Importing articles...');
+    // Step 4: Import articles
+    console.log('\n[4/4] Importing articles...');
     let successCount = 0;
     let existsCount = 0;
     let failCount = 0;
@@ -500,7 +486,9 @@ async function migrate() {
         }
       } else {
         failCount++;
-        console.log(`     ❌ ${article.title.substring(0, 50)}...`);
+        if (i < 10) {
+          console.log(`     ❌ ${article.title.substring(0, 50)}... (${result.error})`);
+        }
       }
 
       // Rate limiting - add small delay every 10 requests
@@ -520,9 +508,6 @@ async function migrate() {
    ℹ️  Already exist: ${existsCount}
    ❌ Failed: ${failCount}
    📦 Total processed: ${articles.length}
-
-📁 Categories: ${Object.keys(categoryMap).length}
-🏷️ Tags: ${Object.keys(tagMap).length}
 
 🎯 Next steps:
    1. Verify data in Strapi Admin: http://103.191.208.235:1337/admin
