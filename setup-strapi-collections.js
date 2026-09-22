@@ -305,6 +305,35 @@ async function createArticlesCollection() {
           "type": "enumeration",
           "enum": ["draft", "published", "archived"],
           "default": "draft"
+        },
+        {
+          "name": "wordpressPostId",
+          "type": "integer",
+          "description": "Original WordPress post ID for reference and deduplication"
+        },
+        {
+          "name": "wordpressUrl",
+          "type": "string",
+          "description": "Original WordPress post URL for archives and redirects"
+        },
+        {
+          "name": "contentFormat",
+          "type": "enumeration",
+          "enum": ["standard", "gallery", "video", "opinion"],
+          "default": "standard",
+          "description": "Content type differentiation from WordPress (post format)"
+        },
+        {
+          "name": "isSticky",
+          "type": "boolean",
+          "default": false,
+          "description": "Was this post sticky/pinned in WordPress"
+        },
+        {
+          "name": "views",
+          "type": "integer",
+          "default": 0,
+          "description": "View count migrated from WordPress post meta"
         }
       ]
     }

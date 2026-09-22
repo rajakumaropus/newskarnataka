@@ -155,9 +155,30 @@ function cleanHtml(html) {
 }
 
 /**
+ * Fetch tag names by IDs
+ */
+async function fetchTagNames(tagIds) {
+  if (!tagIds || tagIds.length === 0) return '';
+  
+  try {
+    const response = await wpClient.get('/wp-json/wp/v2/tags', {
+      params: {
+        include: tagIds.join(','),
+        per_page: 100,
+      },
+    });
+    
+    return response.data.map(tag => tag.name).join(', ');
+  } catch (error) {
+    console.error('  ⚠️  Failed to fetch tag names:', error.message);
+    return '';
+  }
+}
+
+/**
  * Transform WordPress post to Strapi article format
  */
-function transformPost(post) {
+async function transformPost(post, tagNamesMap = {}) {
   // Generate slug
   const slug = post.slug || post.title.rendered
     .toLowerCase()
@@ -178,18 +199,24 @@ function transformPost(post) {
     featuredImage = post._embedded['wp:featuredmedia'][0].source_url;
   }
 
-  // Get first category
-  let categoryId = null;
-  if (post.categories && post.categories.length > 0) {
-    categoryId = post.categories[0];
+  // Get tag names (either from cache or from WordPress)
+  let keywordsStr = '';
+  if (post.tags && post.tags.length > 0) {
+    if (Object.keys(tagNamesMap).length > 0) {
+      keywordsStr = post.tags.map(id => tagNamesMap[id] || `tag-${id}`).join(', ');
+    } else {
+      keywordsStr = (post.tags || []).map(t => `tag-${t}`).join(', ');
+    }
   }
 
-  // Clean content
-  const content = cleanHtml(post.content?.rendered || '');
-
-  // Estimate read time (5 min per 1000 words)
-  const wordCount = content.split(/\s+/).length;
-  const readTime = Math.max(1, Math.ceil(wordCount / 200));
+  // Detect breaking news from tags (if tag name contains "breaking")
+  const isBreakingNews = post.tags && post.tags.length > 0 && 
+    post.tags.some(tagId => {
+      const tagName = tagNamesMap[tagId] || '';
+      return tagName.toLowerCase().includes('breaking') || 
+             tagName.toLowerCase().includes('urgent') ||
+             tagName.toLowerCase().includes('alert');
+    });
 
   return {
     title: post.title.rendered,
@@ -202,13 +229,20 @@ function transformPost(post) {
     tags: post.tags || [],
     publishedDate: post.date,
     updatedDate: post.modified,
-    isFeatured: false,
-    isBreakingNews: false,
+    isFeatured: post.sticky || false,
+    isSticky: post.sticky || false,
+    isBreakingNews: isBreakingNews,
     readTime,
     metaDescription: excerpt,
-    keywords: (post.tags || []).map(t => `tag-${t}`).join(', '),
-    viewsCount: 0,
+    keywords: keywordsStr,
+    viewsCount: post.meta?.views || 0,
+    views: post.meta?.views || 0,
     status: post.status === 'publish' ? 'published' : 'draft',
+    
+    // NEW FIELDS - WordPress data preservation
+    wordpressPostId: post.id,
+    wordpressUrl: post.link,
+    contentFormat: post.format || 'standard',
   };
 }
 
@@ -411,7 +445,18 @@ async function migrate() {
 
     // Step 4: Transform posts
     console.log('\n[4/5] Transforming posts...');
-    const articles = wpPosts.map(post => transformPost(post));
+    
+    // Build tag names map for efficient lookup
+    const tagNamesMap = {};
+    for (const wpTag of wpTags) {
+      tagNamesMap[wpTag.id] = wpTag.name;
+    }
+    
+    const articles = [];
+    for (const post of wpPosts) {
+      const article = await transformPost(post, tagNamesMap);
+      articles.push(article);
+    }
     console.log(`✅ Transformed ${articles.length} articles`);
 
     // Step 5: Import articles
