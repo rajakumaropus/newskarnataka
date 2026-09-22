@@ -235,8 +235,8 @@ async function transformPost(post, tagNamesMap = {}) {
     title: post.title.rendered,
     slug,
     description: excerpt,
-    content,
-    featuredImage,
+    // content is NOT in the current Strapi schema - only description exists
+    // featuredImage: featuredImage, // Not yet supported
     category: categoryId,
     author: post.author,
     tags: post.tags || [],
