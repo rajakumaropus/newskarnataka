@@ -1,11 +1,10 @@
 import axios from 'axios';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://103.191.208.235:1337';
-// Try multiple env variable names for compatibility
-const API_TOKEN = process.env.STRAPI_API_TOKEN_FULL_ACCESS || 
-                  process.env.NEXT_PUBLIC_STRAPI_API_TOKEN ||
+// Use the fresh Strapi API token with full access
+const API_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN || 
                   process.env.STRAPI_API_TOKEN ||
-                  'c47da022dfd6b7d5ecf75684672004d91db115923a8bb480e9f8f376dcd61192e88f88a086957d0402810135d8e00156339b474563987ad8087c0143338b4853508655f066dbcecdf98e8f609b73c1dd181fdd0ecb46ffdb92f152cbe4de4cd87e0883a67eceda20a33cc9f186df9134e502ce839d5cc57e3f060de7866573d2';
+                  '2b9048b75723c62315e2c9332c734967764a4cde11ea324734ae98a437bc970b295866816a8b051721af4b4612070d43371c1ac1132c1045823cf6c6d8b7ff4c4e4a83fd723a40fd81b8a73292275ffcb2d3369424247d6e5ff977c0e8d4a5355c3f958f42725007407c11878285a1e09e92a0bcb65c73a1dee5733b3179a3f8';
 
 export const strapiClient = axios.create({
   baseURL: `${STRAPI_URL}/api`,
@@ -15,57 +14,45 @@ export const strapiClient = axios.create({
   },
 });
 
-// Interfaces
+// Interfaces - Strapi v5 Format (flat structure, no attributes wrapper)
 export interface Article {
   id: number;
-  attributes: {
-    title: string;
-    slug: string;
-    description: string;
-    content: string;
-    status: 'published' | 'draft';
-    is_featured: boolean;
-    publishedAt: string;
-    createdAt: string;
-    updatedAt: string;
-    category?: {
-      data: {
-        id: number;
-        attributes: Category;
-      };
-    };
-    author?: {
-      data: {
-        id: number;
-        attributes: Author;
-      };
-    };
+  documentId?: string;
+  title: string;
+  slug: string;
+  description: string;
+  content?: string;
+  excerpt?: string;
+  tags?: string;
+  wordpressPostId?: number;
+  wordpressUrl?: string;
+  views?: number;
+  isSticky?: boolean;
+  contentFormat?: string;
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  author?: Author;
+  category?: Category;
+  cover?: {
+    id: number;
+    url: string;
   };
 }
 
 export interface Category {
   id: number;
-  attributes: {
-    name: string;
-    slug: string;
-    description: string;
-  };
+  name: string;
+  slug: string;
+  description?: string;
 }
 
 export interface Author {
   id: number;
-  attributes: {
-    name: string;
-    email: string;
-    bio: string;
-    avatar?: {
-      data: {
-        attributes: {
-          url: string;
-        };
-      };
-    };
-  };
+  name: string;
+  email?: string;
+  bio?: string;
+  avatar?: string;
 }
 
 export interface ApiResponse<T> {

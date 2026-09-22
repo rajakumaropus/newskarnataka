@@ -8,13 +8,11 @@ interface ArticleCardProps {
 }
 
 export default function ArticleCard({ article, featured = false }: ArticleCardProps) {
-  const { title, slug, description, content, publishedAt, category, is_featured } =
-    article.attributes;
+  const { title, slug, description, content, publishedAt, category, tags } = article;
 
-  const categoryData = category as any;
-  const categoryName = categoryData?.data?.attributes?.name || 'Uncategorized';
-  const categorySlug = categoryData?.data?.attributes?.slug || '';
-  const readingTime = getReadingTime(content || description);
+  const categoryName = category?.name || 'Uncategorized';
+  const categorySlug = category?.slug || '';
+  const readingTime = getReadingTime(content || description || '');
 
   return (
     <article
@@ -32,16 +30,18 @@ export default function ArticleCard({ article, featured = false }: ArticleCardPr
 
       <div className="p-4 md:p-6">
         {/* Category Badge */}
-        <Link href={`/categories/${categorySlug}`}>
-          <span className="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full hover:bg-blue-200 transition-colors">
-            {categoryName}
-          </span>
-        </Link>
+        {categorySlug && (
+          <Link href={`/categories/${categorySlug}`}>
+            <span className="inline-block px-3 py-1 text-xs font-semibold text-blue-600 bg-blue-100 rounded-full hover:bg-blue-200 transition-colors">
+              {categoryName}
+            </span>
+          </Link>
+        )}
 
-        {/* Featured Badge */}
-        {is_featured && (
-          <span className="inline-block ml-2 px-3 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded-full">
-            Featured
+        {/* Tags Badge */}
+        {tags && (
+          <span className="inline-block ml-2 px-3 py-1 text-xs font-semibold text-green-600 bg-green-100 rounded-full">
+            {tags.split(',')[0].trim()}
           </span>
         )}
 

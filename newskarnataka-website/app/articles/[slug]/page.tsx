@@ -51,15 +51,12 @@ function ArticleContent() {
     publishedAt,
     category,
     author,
-    is_featured,
-  } = article.attributes;
+  } = article;
 
-  const categoryData = category as any;
-  const authorData = author as any;
-  const categoryName = categoryData?.data?.attributes?.name || 'Uncategorized';
-  const categorySlug = categoryData?.data?.attributes?.slug || '';
-  const authorName = authorData?.data?.attributes?.name || 'Anonymous';
-  const readingTime = getReadingTime(content || description);
+  const categoryName = category?.name || 'Uncategorized';
+  const categorySlug = category?.slug || '';
+  const authorName = author?.name || 'Anonymous';
+  const readingTime = getReadingTime(content || description || '');
 
   return (
     <article className="min-h-screen bg-gray-50">
@@ -78,10 +75,10 @@ function ArticleContent() {
           </nav>
 
           {/* Featured Badge */}
-          {is_featured && (
+          {article.isSticky && (
             <div className="mb-4">
               <span className="inline-block px-3 py-1 text-xs font-semibold text-red-600 bg-red-100 rounded-full">
-                Featured
+                Sticky Post
               </span>
             </div>
           )}
