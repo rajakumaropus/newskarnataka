@@ -199,6 +199,19 @@ async function transformPost(post, tagNamesMap = {}) {
     featuredImage = post._embedded['wp:featuredmedia'][0].source_url;
   }
 
+  // Get first category
+  let categoryId = null;
+  if (post.categories && post.categories.length > 0) {
+    categoryId = post.categories[0];
+  }
+
+  // Clean content
+  const content = cleanHtml(post.content?.rendered || '');
+
+  // Estimate read time (5 min per 1000 words)
+  const wordCount = content.split(/\s+/).length;
+  const readTime = Math.max(1, Math.ceil(wordCount / 200));
+
   // Get tag names (either from cache or from WordPress)
   let keywordsStr = '';
   if (post.tags && post.tags.length > 0) {
@@ -416,7 +429,7 @@ async function migrate() {
     // Step 2: Fetch WordPress data
     console.log('\n[2/5] Fetching WordPress data...');
     const [wpPosts, wpCategories, wpTags] = await Promise.all([
-      fetchAllWordPressPosts(5), // Start with first 500 articles (5 pages)
+      fetchAllWordPressPosts(5), // Test with first 500 articles (5 pages)
       fetchWordPressCategories(),
       fetchWordPressTags(),
     ]);
