@@ -194,7 +194,6 @@ function transformPost(post) {
   return {
     title: post.title.rendered,
     slug,
-    excerpt,
     description: excerpt,
     content,
     featuredImage,
