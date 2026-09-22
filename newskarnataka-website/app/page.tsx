@@ -175,20 +175,68 @@ function HomeContent() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16 rounded-2xl mx-4 mb-16 animate-slide-up shadow-glow" style={{ animationDelay: '200ms' }}>
+      <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 text-white py-16 rounded-2xl mx-4 mb-16 animate-slide-up shadow-glow" style={{ animationDelay: '200ms' }}>
         <div className="max-w-2xl mx-auto text-center px-4">
-          <h3 className="text-3xl font-bold mb-4">✉️ Stay Updated</h3>
-          <p className="text-white/90 mb-8">Get the latest news from Karnataka delivered to your inbox</p>
-          <div className="flex gap-2 max-w-md mx-auto flex-col sm:flex-row">
+          <div className="mb-8">
+            <p className="text-blue-100 text-sm font-semibold uppercase tracking-widest mb-2">NEVER MISS AN UPDATE</p>
+            <h3 className="text-4xl font-black mb-4">✉️ Stay in the Loop</h3>
+            <p className="text-white/90 mb-8 text-lg">Get the latest news from Karnataka delivered to your inbox every morning</p>
+          </div>
+          
+          <div className="flex gap-2 max-w-md mx-auto flex-col sm:flex-row mb-8">
             <input
               type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all"
+              placeholder="Enter your email address"
+              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all placeholder-gray-600"
             />
-            <button className="px-6 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 hover:shadow-lg transition-all transform hover:scale-105">
+            <button className="px-8 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 hover:shadow-lg transition-all transform hover:scale-105 whitespace-nowrap">
               Subscribe
             </button>
           </div>
+
+          <p className="text-white/70 text-sm">
+            We respect your privacy. Unsubscribe at any time. No spam, just quality news.
+          </p>
+        </div>
+      </section>
+
+      {/* Social Media Section */}
+      <section className="max-w-7xl mx-auto px-4 mb-16 bg-white rounded-2xl p-12 shadow-lg animate-fade-in">
+        <div className="text-center mb-12">
+          <h3 className="text-3xl font-black text-gray-900 mb-4">📱 Follow Us</h3>
+          <p className="text-gray-600 text-lg">Connect with us on social media for real-time updates and exclusive content</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {[
+            { name: 'Facebook', icon: '📘', color: 'from-blue-500 to-blue-600', followers: '45K', handle: '@NewsKarnataka' },
+            { name: 'Twitter', icon: '𝕏', color: 'from-gray-700 to-gray-800', followers: '32K', handle: '@NewsKarnataka' },
+            { name: 'Instagram', icon: '📷', color: 'from-pink-500 to-rose-500', followers: '28K', handle: '@NewsKarnataka' },
+            { name: 'YouTube', icon: '▶️', color: 'from-red-500 to-red-600', followers: '15K', handle: '@NewsKarnataka' },
+          ].map((social, index) => (
+            <a
+              key={social.name}
+              href="#"
+              className="group"
+              style={{ animation: `fadeIn 0.6s ease-out ${1200 + index * 100}ms both` }}
+            >
+              <div className={`bg-gradient-to-br ${social.color} rounded-xl p-6 text-white hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2`}>
+                <div className="text-5xl mb-4 group-hover:scale-125 transition-transform">{social.icon}</div>
+                <h4 className="text-xl font-bold mb-2">{social.name}</h4>
+                <p className="text-white/90 text-sm mb-3">{social.handle}</p>
+                <p className="text-white/80 text-xs font-semibold">{social.followers} followers</p>
+                <div className="mt-4 pt-4 border-t border-white/20">
+                  <button className="text-sm font-bold hover:underline transition">Follow</button>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <p className="text-gray-600 text-sm">
+            Stay connected for breaking news, exclusive interviews, and behind-the-scenes content from around Karnataka
+          </p>
         </div>
       </section>
     </main>
@@ -286,18 +334,22 @@ export default function Home() {
 
             {/* Follow Us */}
             <div className="animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <h3 className="text-white font-bold mb-4 text-lg">Follow Us</h3>
-              <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:shadow-glow transition-all duration-300 transform hover:scale-110">
+              <h3 className="text-white font-bold mb-4 text-lg">🌐 Follow Us</h3>
+              <div className="flex gap-3 mb-6">
+                <a href="https://facebook.com/newskarnataka" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 hover:shadow-glow hover:scale-110 transition-all duration-300 font-bold">
                   f
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-400 hover:shadow-glow transition-all duration-300 transform hover:scale-110">
+                <a href="https://twitter.com/newskarnataka" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 hover:shadow-glow hover:scale-110 transition-all duration-300 font-bold">
                   𝕏
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 hover:shadow-glow transition-all duration-300 transform hover:scale-110">
+                <a href="https://instagram.com/newskarnataka" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 hover:shadow-glow hover:scale-110 transition-all duration-300">
                   📷
                 </a>
+                <a href="https://youtube.com/newskarnataka" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 hover:shadow-glow hover:scale-110 transition-all duration-300 font-bold">
+                  ▶️
+                </a>
               </div>
+              <p className="text-gray-400 text-sm">Follow us for real-time updates and exclusive content</p>
             </div>
           </div>
 
