@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://103.191.208.235:1337';
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://strapi.opusinfiniti.com';
 // Use the fresh Strapi API token with full access
 const API_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN || 
                   process.env.STRAPI_API_TOKEN ||
