@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://strapi.opusinfiniti.com';
-// Use the fresh Strapi API token with full access
-const API_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN || 
-                  process.env.STRAPI_API_TOKEN ||
-                  '2b9048b75723c62315e2c9332c734967764a4cde11ea324734ae98a437bc970b295866816a8b051721af4b4612070d43371c1ac1132c1045823cf6c6d8b7ff4c4e4a83fd723a40fd81b8a73292275ffcb2d3369424247d6e5ff977c0e8d4a5355c3f958f42725007407c11878285a1e09e92a0bcb65c73a1dee5733b3179a3f8';
+// Hardcode for now - Vercel env vars may not be set
+const STRAPI_URL = 'https://strapi.opusinfiniti.com';
+const API_TOKEN = 'ac47da022dfd6b7d5ecf75684672004d91db115923a8bb480e9f8f376dcd61192e88f88a086957d0402810135d8e00156339b474563987ad8087c0143338b4853508655f066dbcecdf98e8f609b73c1dd181fdd0ecb46ffdb92f152cbe4de4cd87e0883a67eceda20a33cc9f186df9134e502ce839d5cc57e3f060de7866573d2';
 
 export const strapiClient = axios.create({
   baseURL: `${STRAPI_URL}/api`,
