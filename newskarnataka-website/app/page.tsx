@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from 'react';
 import Link from 'next/link';
+import Header from '@/components/Header';
 import ArticleCard from '@/components/ArticleCard';
 import CategoryFilter from '@/components/CategoryFilter';
 import SearchBar from '@/components/SearchBar';
@@ -33,37 +34,57 @@ function HomeContent() {
 
   return (
     <main className="bg-gradient-to-br from-slate-50 to-slate-100 pb-20">
-      {/* Hero Section with Featured Article */}
+      {/* Enhanced Hero Section */}
       {!featuredLoading && featuredArticles.length > 0 && (
-        <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 text-white py-16 mb-16 animate-fade-in">
+        <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 text-white py-20 mb-16">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
               {/* Main Featured Article */}
-              <div className="lg:col-span-2 animate-slide-in-left">
-                <span className="inline-block px-4 py-1 bg-white/20 rounded-full text-sm font-semibold mb-4 backdrop-blur">
-                  🔥 Featured Story
-                </span>
-                <h2 className="text-4xl md:text-5xl font-black leading-tight mb-4">
+              <div className="lg:col-span-2 space-y-6">
+                <div className="flex items-center gap-2">
+                  <span className="inline-block px-4 py-1.5 bg-white/20 rounded-full text-sm font-bold backdrop-blur border border-white/30">
+                    🔥 TRENDING
+                  </span>
+                  <span className="text-xs font-semibold text-blue-100">2 min read</span>
+                </div>
+                
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
                   {featuredArticles[0]?.title}
                 </h2>
-                <p className="text-lg text-white/90 mb-6 line-clamp-2">
+                
+                <p className="text-lg text-white/95 line-clamp-3 font-medium">
                   {featuredArticles[0]?.description}
                 </p>
-                <Link
-                  href={`/articles/${featuredArticles[0]?.slug}`}
-                  className="inline-block px-8 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 hover:shadow-lg transition-all transform hover:scale-105"
-                >
-                  Read Full Story →
-                </Link>
+                
+                <div className="flex gap-4 pt-4">
+                  <Link
+                    href={`/articles/${featuredArticles[0]?.slug}`}
+                    className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                  >
+                    Read Full Story
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </Link>
+                  <button className="inline-flex items-center gap-2 px-8 py-3.5 bg-white/20 text-white font-bold rounded-lg hover:bg-white/30 transition-all duration-300 border border-white/30">
+                    Share
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C9.75 12.938 11 12.226 11 10.5c0-2.45-2.239-4.5-5-4.5S1 8.05 1 10.5c0 1.726 1.25 2.438 2.316 2.842m8.684-13.342l-.925-.766A10.025 10.025 0 006 1c-5.621 0-10.196 3.98-10.196 8.9 0 .569.033 1.133.098 1.69M23 19.5c0-2.485-1.902-4.5-4.5-4.5S14 17.015 14 19.5s1.902 4.5 4.5 4.5 4.5-2.015 4.5-4.5zm-2-1h-5v5h5v-5z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
-              {/* Featured Image Placeholder */}
-              <div className="hidden lg:block animate-fade-in" style={{ animationDelay: '200ms' }}>
-                <div className="aspect-video bg-white/10 rounded-2xl backdrop-blur flex items-center justify-center border-2 border-white/20 hover:border-white/40 transition-all hover:shadow-glow">
-                  <div className="text-center">
-                    <p className="text-3xl">📰</p>
-                    <p className="text-sm text-white/80 mt-2">Featured Image</p>
+              {/* Featured Image */}
+              <div className="hidden lg:block">
+                <div className="relative aspect-video bg-gradient-to-br from-white/10 to-white/5 rounded-2xl border border-white/20 overflow-hidden hover:border-white/40 transition-all duration-300 shadow-2xl group">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <p className="text-6xl mb-2 group-hover:scale-125 transition-transform duration-300">📰</p>
+                      <p className="text-sm text-white/70 font-medium">Featured Story</p>
+                    </div>
                   </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 </div>
               </div>
             </div>
@@ -72,43 +93,41 @@ function HomeContent() {
       )}
 
       {/* Search and Category Section */}
-      <section className="max-w-7xl mx-auto px-4 mb-16 animate-slide-up" style={{ animationDelay: '100ms' }}>
+      <section className="max-w-7xl mx-auto px-4 mb-16">
         <div className="space-y-6">
           <SearchBar />
           <CategoryFilter />
         </div>
       </section>
 
-      {/* Trending Articles Section */}
+      {/* Trending Articles */}
       {!featuredLoading && featuredArticles.length > 1 && (
         <section className="max-w-7xl mx-auto px-4 mb-20">
-          <div className="flex items-center gap-3 mb-8 animate-fade-in">
-            <div className="w-1 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full animate-pulse-glow"></div>
-            <h2 className="text-3xl font-black text-gray-900">🔥 Trending Now</h2>
+          <div className="mb-10">
+            <div className="flex items-center gap-3">
+              <div className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full"></div>
+              <h2 className="text-4xl font-black text-gray-900">🔥 Trending Now</h2>
+              <span className="ml-auto text-sm text-gray-600 font-semibold">Top stories this week</span>
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             {featuredArticles.slice(1, 4).map((article, index) => (
-              <div 
-                key={article.id}
-                style={{ 
-                  animation: `slideUp 0.6s ease-out ${300 + index * 100}ms both`
-                }}
-              >
-                <ArticleCard article={article} index={index} />
-              </div>
+              <ArticleCard key={article.id} article={article} index={index} />
             ))}
           </div>
         </section>
       )}
 
-      {/* Categories Showcase Section */}
+      {/* Categories Showcase */}
       <section className="max-w-7xl mx-auto px-4 mb-20">
-        <div className="flex items-center gap-3 mb-8 animate-fade-in">
-          <div className="w-1 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full animate-pulse-glow"></div>
-          <h2 className="text-3xl font-black text-gray-900">📚 Browse by Category</h2>
+        <div className="mb-10">
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full"></div>
+            <h2 className="text-4xl font-black text-gray-900">📚 Browse by Category</h2>
+          </div>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
           {[
             { name: 'Karnataka', icon: '🌟', color: 'from-blue-500 to-blue-600' },
             { name: 'Technology', icon: '💻', color: 'from-purple-500 to-purple-600' },
@@ -116,53 +135,42 @@ function HomeContent() {
             { name: 'Business', icon: '💼', color: 'from-orange-500 to-orange-600' },
             { name: 'Entertainment', icon: '🎬', color: 'from-pink-500 to-pink-600' },
             { name: 'Education', icon: '🎓', color: 'from-indigo-500 to-indigo-600' },
-          ].map((category, index) => (
-            <Link
-              key={category.name}
-              href={`/categories/${category.name.toLowerCase()}`}
-              style={{ 
-                animation: `fadeIn 0.6s ease-out ${600 + index * 50}ms both`
-              }}
-            >
-              <div className={`bg-gradient-to-br ${category.color} rounded-xl p-6 text-white text-center hover:shadow-2xl transition-all duration-300 transform hover:scale-110 hover:-translate-y-2 cursor-pointer`}>
-                <div className="text-4xl mb-3 group-hover:scale-125 transition-transform duration-300">{category.icon}</div>
-                <h3 className="font-bold text-lg">{category.name}</h3>
-                <p className="text-xs text-white/80 mt-2">Explore articles</p>
+          ].map((category) => (
+            <Link key={category.name} href={`/categories/${category.name.toLowerCase()}`}>
+              <div className={`bg-gradient-to-br ${category.color} rounded-2xl p-6 text-white text-center hover:shadow-2xl transition-all duration-300 transform hover:scale-110 hover:-translate-y-2 cursor-pointer border border-white/20`}>
+                <div className="text-5xl mb-4 block">{category.icon}</div>
+                <h3 className="font-black text-lg">{category.name}</h3>
+                <p className="text-xs text-white/80 mt-3 font-medium">Explore</p>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* All Articles Section */}
+      {/* Latest Articles */}
       <section className="max-w-7xl mx-auto px-4 mb-16">
-        <div className="flex items-center gap-3 mb-8 animate-fade-in">
-          <div className="w-1 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full"></div>
-          <h2 className="text-3xl font-black text-gray-900">Latest News</h2>
+        <div className="mb-10">
+          <div className="flex items-center gap-3">
+            <div className="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-purple-600 rounded-full"></div>
+            <h2 className="text-4xl font-black text-gray-900">Latest News</h2>
+            <span className="ml-auto text-sm text-gray-600 font-semibold">{pagination?.total || 0} articles</span>
+          </div>
         </div>
 
         {articles.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl shadow-sm animate-fade-in">
+          <div className="text-center py-20 bg-white rounded-2xl shadow-sm">
             <p className="text-gray-500 text-lg">📰 No articles found at the moment.</p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
               {articles.map((article, index) => (
-                <div
-                  key={article.id}
-                  style={{ 
-                    animation: `slideUp 0.6s ease-out ${index * 50}ms both`
-                  }}
-                >
-                  <ArticleCard article={article} index={index} />
-                </div>
+                <ArticleCard key={article.id} article={article} index={index} />
               ))}
             </div>
 
-            {/* Pagination */}
             {pagination.pageCount > 1 && (
-              <div className="mt-12 animate-fade-in">
+              <div className="mt-12">
                 <Pagination
                   currentPage={pagination.page}
                   totalPages={pagination.pageCount}
@@ -175,68 +183,58 @@ function HomeContent() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 text-white py-16 rounded-2xl mx-4 mb-16 animate-slide-up shadow-glow" style={{ animationDelay: '200ms' }}>
+      <section className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 text-white py-16 rounded-3xl mx-4 mb-16 shadow-2xl">
         <div className="max-w-2xl mx-auto text-center px-4">
           <div className="mb-8">
-            <p className="text-blue-100 text-sm font-semibold uppercase tracking-widest mb-2">NEVER MISS AN UPDATE</p>
-            <h3 className="text-4xl font-black mb-4">✉️ Stay in the Loop</h3>
-            <p className="text-white/90 mb-8 text-lg">Get the latest news from Karnataka delivered to your inbox every morning</p>
+            <p className="text-blue-100 text-sm font-black uppercase tracking-widest mb-3">📧 Stay Updated</p>
+            <h3 className="text-5xl font-black mb-4">Get Latest News</h3>
+            <p className="text-white/90 mb-8 text-lg font-medium">Subscribe to our newsletter and never miss breaking news from Karnataka</p>
           </div>
           
-          <div className="flex gap-2 max-w-md mx-auto flex-col sm:flex-row mb-8">
+          <form onSubmit={(e) => { e.preventDefault(); }} className="flex gap-3 max-w-md mx-auto flex-col sm:flex-row mb-6">
             <input
               type="email"
-              placeholder="Enter your email address"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all placeholder-gray-600"
+              placeholder="your@email.com"
+              required
+              className="flex-1 px-5 py-3.5 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all font-medium placeholder-gray-600"
             />
-            <button className="px-8 py-3 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 hover:shadow-lg transition-all transform hover:scale-105 whitespace-nowrap">
+            <button type="submit" className="px-8 py-3.5 bg-white text-blue-600 font-black rounded-xl hover:bg-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
               Subscribe
             </button>
-          </div>
+          </form>
 
-          <p className="text-white/70 text-sm">
-            We respect your privacy. Unsubscribe at any time. No spam, just quality news.
+          <p className="text-white/70 text-sm font-medium">
+            ✓ No spam · Unsubscribe anytime · 100% free
           </p>
         </div>
       </section>
 
       {/* Social Media Section */}
-      <section className="max-w-7xl mx-auto px-4 mb-16 bg-white rounded-2xl p-12 shadow-lg animate-fade-in">
+      <section className="max-w-7xl mx-auto px-4 mb-16 bg-white rounded-3xl p-12 shadow-lg">
         <div className="text-center mb-12">
-          <h3 className="text-3xl font-black text-gray-900 mb-4">📱 Follow Us</h3>
-          <p className="text-gray-600 text-lg">Connect with us on social media for real-time updates and exclusive content</p>
+          <h3 className="text-4xl font-black text-gray-900 mb-4">📱 Follow Us</h3>
+          <p className="text-gray-600 text-lg font-medium">Get real-time updates and exclusive content on social media</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { name: 'Facebook', icon: '📘', color: 'from-blue-500 to-blue-600', followers: '45K', handle: '@NewsKarnataka' },
-            { name: 'Twitter', icon: '𝕏', color: 'from-gray-700 to-gray-800', followers: '32K', handle: '@NewsKarnataka' },
-            { name: 'Instagram', icon: '📷', color: 'from-pink-500 to-rose-500', followers: '28K', handle: '@NewsKarnataka' },
-            { name: 'YouTube', icon: '▶️', color: 'from-red-500 to-red-600', followers: '15K', handle: '@NewsKarnataka' },
-          ].map((social, index) => (
-            <a
-              key={social.name}
-              href="#"
-              className="group"
-              style={{ animation: `fadeIn 0.6s ease-out ${1200 + index * 100}ms both` }}
-            >
-              <div className={`bg-gradient-to-br ${social.color} rounded-xl p-6 text-white hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2`}>
-                <div className="text-5xl mb-4 group-hover:scale-125 transition-transform">{social.icon}</div>
-                <h4 className="text-xl font-bold mb-2">{social.name}</h4>
-                <p className="text-white/90 text-sm mb-3">{social.handle}</p>
-                <p className="text-white/80 text-xs font-semibold">{social.followers} followers</p>
-                <div className="mt-4 pt-4 border-t border-white/20">
-                  <button className="text-sm font-bold hover:underline transition">Follow</button>
-                </div>
+            { name: 'Facebook', icon: '📘', color: 'from-blue-500 to-blue-600', followers: '45.2K', handle: '@NewsKarnataka' },
+            { name: 'Twitter', icon: '𝕏', color: 'from-gray-700 to-gray-800', followers: '32.8K', handle: '@NewsKarnataka' },
+            { name: 'Instagram', icon: '📷', color: 'from-pink-500 to-rose-500', followers: '28.5K', handle: '@NewsKarnataka' },
+            { name: 'YouTube', icon: '▶️', color: 'from-red-500 to-red-600', followers: '15.9K', handle: '@NewsKarnataka' },
+          ].map((social) => (
+            <a key={social.name} href="#" className="group">
+              <div className={`bg-gradient-to-br ${social.color} rounded-2xl p-8 text-white hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 border border-white/20`}>
+                <div className="text-6xl mb-4">{social.icon}</div>
+                <h4 className="text-xl font-black mb-2">{social.name}</h4>
+                <p className="text-white/90 text-sm mb-3 font-bold">{social.handle}</p>
+                <p className="text-white/70 text-xs font-black mb-4">{social.followers} Followers</p>
+                <button className="w-full py-2.5 bg-white text-gray-900 rounded-lg font-black text-sm hover:bg-gray-100 transition-all duration-300">
+                  Follow
+                </button>
               </div>
             </a>
           ))}
-        </div>
-
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 text-sm">
-            Stay connected for breaking news, exclusive interviews, and behind-the-scenes content from around Karnataka
-          </p>
         </div>
       </section>
     </main>
@@ -246,46 +244,8 @@ function HomeContent() {
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Modern Header */}
-      <header className="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-200 animate-slide-down">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-lg group-hover:shadow-lg group-hover:shadow-blue-500/50 transition-all duration-300">
-                NK
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  NewsKarnataka
-                </h1>
-                <p className="text-xs text-gray-600">Local News from Karnataka</p>
-              </div>
-            </Link>
-
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 font-semibold transition duration-300">
-                Home
-              </Link>
-              <Link href="/" className="text-gray-700 hover:text-blue-600 font-semibold transition duration-300">
-                Categories
-              </Link>
-              <Link href="/" className="text-gray-700 hover:text-blue-600 font-semibold transition duration-300">
-                About
-              </Link>
-            </nav>
-
-            {/* Search Icon */}
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition duration-300">
-              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </header>
-
+      <Header />
+      
       <Suspense
         fallback={
           <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -302,59 +262,76 @@ export default function Home() {
         <HomeContent />
       </Suspense>
 
-      {/* Modern Footer */}
-      <footer className="bg-gradient-to-b from-gray-900 to-black text-gray-300">
+      {/* Professional Footer */}
+      <footer className="bg-gradient-to-b from-gray-900 via-gray-950 to-black text-gray-300">
         <div className="max-w-7xl mx-auto px-4 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-            {/* About */}
-            <div className="animate-fade-in">
-              <h3 className="text-white font-bold mb-4 text-lg">NewsKarnataka</h3>
-              <p className="text-sm text-gray-400">Your trusted source for local news and updates from Karnataka. Bringing you the stories that matter.</p>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-12">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-black">
+                  NK
+                </div>
+                <h3 className="text-white font-black text-lg">NewsKarnataka</h3>
+              </div>
+              <p className="text-sm text-gray-400 leading-relaxed">Your trusted source for local news and breaking stories from Karnataka.</p>
             </div>
 
             {/* Quick Links */}
-            <div className="animate-fade-in" style={{ animationDelay: '100ms' }}>
-              <h3 className="text-white font-bold mb-4 text-lg">Quick Links</h3>
+            <div>
+              <h4 className="text-white font-black mb-4">Quick Links</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/" className="hover:text-white transition duration-300">🏠 Home</Link></li>
-                <li><Link href="/" className="hover:text-white transition duration-300">📁 Categories</Link></li>
-                <li><Link href="/" className="hover:text-white transition duration-300">ℹ️ About Us</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">🏠 Home</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">📁 Categories</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">ℹ️ About Us</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">📧 Contact</Link></li>
               </ul>
             </div>
 
             {/* Categories */}
-            <div className="animate-fade-in" style={{ animationDelay: '200ms' }}>
-              <h3 className="text-white font-bold mb-4 text-lg">Categories</h3>
+            <div>
+              <h4 className="text-white font-black mb-4">Categories</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/" className="hover:text-white transition duration-300">🌟 Karnataka</Link></li>
-                <li><Link href="/" className="hover:text-white transition duration-300">💻 Technology</Link></li>
-                <li><Link href="/" className="hover:text-white transition duration-300">⚽ Sports</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">🌟 Karnataka</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">💻 Technology</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">⚽ Sports</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">💼 Business</Link></li>
               </ul>
             </div>
 
-            {/* Follow Us */}
-            <div className="animate-fade-in" style={{ animationDelay: '300ms' }}>
-              <h3 className="text-white font-bold mb-4 text-lg">🌐 Follow Us</h3>
+            {/* Support */}
+            <div>
+              <h4 className="text-white font-black mb-4">Support</h4>
+              <ul className="space-y-2 text-sm">
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">❓ FAQ</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">📋 Privacy Policy</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">⚖️ Terms of Service</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition duration-300">📧 Contact Us</Link></li>
+              </ul>
+            </div>
+
+            {/* Social */}
+            <div>
+              <h4 className="text-white font-black mb-4">Follow Us</h4>
               <div className="flex gap-3 mb-6">
-                <a href="https://facebook.com/newskarnataka" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 hover:shadow-glow hover:scale-110 transition-all duration-300 font-bold">
-                  f
-                </a>
-                <a href="https://twitter.com/newskarnataka" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 hover:shadow-glow hover:scale-110 transition-all duration-300 font-bold">
-                  𝕏
-                </a>
-                <a href="https://instagram.com/newskarnataka" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 hover:shadow-glow hover:scale-110 transition-all duration-300">
-                  📷
-                </a>
-                <a href="https://youtube.com/newskarnataka" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 hover:shadow-glow hover:scale-110 transition-all duration-300 font-bold">
-                  ▶️
-                </a>
+                <a href="#" className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-all duration-300 hover:scale-110 font-bold">f</a>
+                <a href="#" className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-all duration-300 hover:scale-110 font-bold">𝕏</a>
+                <a href="#" className="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center text-white hover:bg-pink-700 transition-all duration-300 hover:scale-110">📷</a>
+                <a href="#" className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700 transition-all duration-300 hover:scale-110 font-bold">▶️</a>
               </div>
-              <p className="text-gray-400 text-sm">Follow us for real-time updates and exclusive content</p>
+              <p className="text-xs text-gray-500">Subscribe to our channels for the latest updates</p>
             </div>
           </div>
 
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2026 NewsKarnataka. All rights reserved. | Privacy Policy | Terms of Service</p>
+          <div className="border-t border-gray-800 pt-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-sm text-gray-500">© 2026 NewsKarnataka. All rights reserved.</p>
+              <div className="flex gap-6 text-sm">
+                <Link href="/" className="text-gray-500 hover:text-gray-300 transition duration-300">Privacy</Link>
+                <Link href="/" className="text-gray-500 hover:text-gray-300 transition duration-300">Terms</Link>
+                <Link href="/" className="text-gray-500 hover:text-gray-300 transition duration-300">Sitemap</Link>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
