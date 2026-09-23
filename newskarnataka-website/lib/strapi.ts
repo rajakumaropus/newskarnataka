@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Hardcode for now - Vercel env vars may not be set
 const STRAPI_URL = 'https://strapi.opusinfiniti.com';
-const API_TOKEN = 'ac47da022dfd6b7d5ecf75684672004d91db115923a8bb480e9f8f376dcd61192e88f88a086957d0402810135d8e00156339b474563987ad8087c0143338b4853508655f066dbcecdf98e8f609b73c1dd181fdd0ecb46ffdb92f152cbe4de4cd87e0883a67eceda20a33cc9f186df9134e502ce839d5cc57e3f060de7866573d2';
+const API_TOKEN = 'e137038b3e009f54434a83a6084cebead5beb48d91bb4fed7185ccedd91baa046f95b759a87cc25ac21bc32b33db326dbf495cac5e67686a6f819d97773b0f63e67c183ad927507f293080eac48334b30ab392edbcad864f390b58fc964a1a8aae2eef6f73156f1be0070e686852290afddb1129de5368f760e2b5496776ab32';
 
 export const strapiClient = axios.create({
   baseURL: `${STRAPI_URL}/api`,
