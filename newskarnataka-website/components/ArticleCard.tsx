@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Article } from '@/lib/strapi';
 import { formatDate, truncateText, getReadingTime } from '@/lib/utils';
 
@@ -9,14 +10,14 @@ interface ArticleCardProps {
 }
 
 export default function ArticleCard({ article, featured = false, index = 0 }: ArticleCardProps) {
-  const { title, slug, description, content, publishedAt, tags, category } = article;
+  const { title, slug, description, content, publishedAt, tags, category, cover } = article;
 
   const categoryName = category?.name || 'Uncategorized';
   const categorySlug = category?.slug || '';
   const readingTime = getReadingTime(content || description || '');
   const tagList = tags?.split(',')[0]?.trim() || '';
 
-  // Professional color gradients for each card
+  // Professional color gradients for fallback
   const gradients = [
     'from-blue-500 to-blue-700',
     'from-purple-500 to-purple-700',
@@ -39,12 +40,35 @@ export default function ArticleCard({ article, featured = false, index = 0 }: Ar
   const gradient = gradients[index % gradients.length];
   const categoryColor = categoryColors[categorySlug?.toLowerCase()] || { bg: 'bg-gray-100', text: 'text-gray-700' };
 
+  // Determine image URL
+  const imageUrl = cover?.url 
+    ? `https://strapi.opusinfiniti.com${cover.url}`
+    : null;
+
   return (
     <article className="group rounded-2xl overflow-hidden bg-white border border-gray-200 hover:border-gray-300 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
       {/* Image Container */}
-      <div className={`relative w-full h-48 bg-gradient-to-br ${gradient} overflow-hidden`}>
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 group-hover:from-black/60 transition-all duration-300"></div>
+      <div className={`relative w-full h-48 overflow-hidden bg-gradient-to-br ${gradient}`}>
+        {/* Image with fallback to gradient */}
+        {imageUrl ? (
+          <div className="relative w-full h-full">
+            <Image
+              src={imageUrl}
+              alt={title}
+              fill
+              className="object-cover group-hover:scale-110 transition-transform duration-500"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              priority={index < 3}
+            />
+            {/* Overlay for gradient effect */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 group-hover:from-black/60 transition-all duration-300"></div>
+          </div>
+        ) : (
+          // Fallback to gradient
+          <div className="absolute inset-0 bg-gradient-to-br from-current via-current to-current">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 group-hover:from-black/60 transition-all duration-300"></div>
+          </div>
+        )}
         
         {/* Category Badge */}
         <div className="absolute top-4 left-4 z-10">
