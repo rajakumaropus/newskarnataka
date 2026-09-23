@@ -38,7 +38,7 @@ export default function CategoryFilter() {
 
         {/* Category Links */}
         {categories.map((category) => {
-          const categorySlug = category.attributes?.slug || '';
+          const categorySlug = category.slug || '';
           const isActive = searchParams.get('category') === categorySlug;
 
           return (
@@ -51,7 +51,7 @@ export default function CategoryFilter() {
                   : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
               }`}
             >
-              {category.attributes?.name}
+              {category.name}
             </Link>
           );
         })}

@@ -47,8 +47,8 @@ function CategoryContent() {
     );
   }
 
-  const categoryName = category.attributes?.name || 'Category';
-  const categoryDescription = category.attributes?.description || '';
+  const categoryName = category.name || 'Category';
+  const categoryDescription = category.description || '';
 
   return (
     <div className="min-h-screen bg-gray-50">
